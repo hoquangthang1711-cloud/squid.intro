@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SQUID — Giải pháp quản lý & báo cáo chất lượng cho ngành may mặc</title>
+  <meta name="description" content="SQUID: nền tảng thu thập, phân loại và báo cáo kiểm tra chất lượng chuyên sâu cho ngành may mặc. Truy cập mọi lúc, phân tích trực quan, AQL &amp; báo cáo tự động." />
+  <meta property="og:title" content="SQUID — Giải pháp quản lý & báo cáo chất lượng cho ngành may mặc" />
+  <meta property="og:description" content="Nền tảng toàn diện cho QA, Supervisor, và Management: 100%, Inline, Sample, Audit, AQL, báo cáo trực quan, tự động, nhanh chóng và chính xác." />
+  <meta name="theme-color" content="#0a0a0a" />
+
+  <style>
+    /* ---------- Basic Reset & Variables ---------- */
+    :root{
+      --bg: #fff;
+      --muted: #6b7280;
+      --accent: linear-gradient(90deg,#0073ff,#00c6ff);
+      --card: #0f1724;
+      --glass: rgba(15,23,36,0.04);
+      --max-width: 1100px;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(12,24,40,0.08);
+      --text: #0b1220;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color:var(--text);
+      background: linear-gradient(180deg,#fbfdff 0%, #fff 60%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding-bottom:60px;
+    }
+
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+
+    /* ---------- Header ---------- */
+    header{
+      width:100%;
+      position:sticky; top:0; z-index:40;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55));
+      border-bottom: 1px solid rgba(16,24,40,0.05);
+    }
+    .nav{
+      max-width:var(--max-width);
+      margin:0 auto; padding:18px 20px; display:flex; align-items:center; gap:20px;
+    }
+    .logo{
+      display:flex;align-items:center;gap:12px;font-weight:600;
+      color:var(--text);
+    }
+    .logo .mark{width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:var(--accent);box-shadow: 0 6px 20px rgba(0,118,255,0.16); color:#fff; font-weight:700}
+    nav.menu{margin-left:auto; display:flex; gap:18px; align-items:center}
+    nav.menu a{color:var(--muted); font-weight:600; font-size:14px}
+    .cta-btn{
+      background: linear-gradient(90deg,#0073ff,#00c6ff);
+      color:#fff; border-radius:10px; padding:10px 16px; font-weight:700; font-size:14px;
+      box-shadow: 0 8px 20px rgba(0,115,255,0.16);
+    }
+
+    /* ---------- Hero ---------- */
+    .hero{
+      max-width:var(--max-width);
+      margin:46px auto 40px; padding:40px 28px; display:grid; grid-template-columns: 1fr 480px; gap:40px; align-items:center;
+    }
+    .hero-left{padding-right:10px}
+    .eyebrow{color:var(--muted); font-weight:700; letter-spacing:1px; font-size:13px}
+    .title{
+      font-size:44px; font-weight:700; margin:14px 0 12px; line-height:1.02;
+      letter-spacing:-0.02em;
+    }
+    .subtitle{color:var(--muted); font-size:17px; margin-bottom:22px}
+    .hero-cta{display:flex; gap:12px; align-items:center}
+    .btn-ghost{padding:10px 16px;border-radius:10px;border:1px solid rgba(12,24,40,0.06);background:#fff;font-weight:700}
+    .hero-features{display:flex; gap:12px; margin-top:28px; flex-wrap:wrap}
+    .feature-pill{background:var(--glass); padding:10px 12px;border-radius:10px;color:var(--text); font-weight:600; font-size:14px}
+
+    .hero-right{
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+      border-radius:18px; padding:22px; box-shadow:var(--shadow);
+      border:1px solid rgba(12,24,40,0.04);
+    }
+    /* device mock */
+    .device {
+      width:100%; height:100%; min-height:380px; border-radius:12px; overflow:hidden;
+      background:linear-gradient(180deg,#081426,#061224);
+      display:flex; align-items:center; justify-content:center; color:#fff;
+      position:relative;
+    }
+    .device .screen {
+      width:92%; height:86%; background:linear-gradient(180deg,#02162a,#05293d);
+      border-radius:10px; padding:18px; box-shadow: inset 0 10px 40px rgba(0,0,0,0.25);
+      display:flex; flex-direction:column; justify-content:flex-start;
+    }
+    .screen h4{margin:0 0 8px; font-weight:700}
+    .screen p{margin:0; color:rgba(255,255,255,0.9); font-size:13px}
+
+    /* ---------- Sections ---------- */
+    main{max-width:var(--max-width); margin:0 auto; padding:8px 20px 40px}
+    .section{padding:36px 0; border-top:1px solid rgba(12,24,40,0.04)}
+    .section h2{font-size:28px; margin:10px 0 14px; font-weight:700}
+    .lead{color:var(--muted); font-size:15px}
+
+    /* features grid */
+    .features-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:18px}
+    .card{
+      background:#fff; border-radius:14px; padding:20px; box-shadow:var(--shadow); border:1px solid rgba(12,24,40,0.04);
+    }
+    .card .icon{width:52px;height:52;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .card h3{margin:12px 0 8px; font-size:18px}
+    .card p{color:var(--muted); font-size:14px}
+
+    /* details area */
+    .detail {display:grid; grid-template-columns: 1fr 1fr; gap:28px; margin-top:18px}
+    .detail .panel {background:linear-gradient(180deg,#fff,#fbfdff); border-radius:12px; padding:20px; border:1px solid rgba(12,24,40,0.04)}
+
+    /* FAQ */
+    .faq-tabs{display:flex; gap:12px; margin-bottom:18px}
+    .tab{padding:10px 14px;border-radius:10px;background:var(--glass); font-weight:700; cursor:pointer}
+    .tab.active{background:linear-gradient(90deg,#eef9ff,#f4fbff); box-shadow:0 6px 18px rgba(0,115,255,0.06)}
+    .faq-list{display:grid; gap:12px}
+    .qa{background:#fff;border-radius:12px;padding:14px;border:1px solid rgba(12,24,40,0.04);box-shadow:var(--shadow)}
+    /* FAQ: clickable questions using <details> / <summary> */
+    .qa summary{margin:0 0 8px;font-size:16px;font-weight:600;cursor:pointer;list-style:none}
+    /* Hide answers by default; reveal when details is open */
+    .qa p{margin:0;color:var(--muted);font-size:14px;display:none}
+    .qa[open] p{display:block}
+
+    /* Footer */
+    footer{margin-top:40px;padding:28px 20px; color:var(--muted); text-align:center}
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:1000px){
+      .hero{grid-template-columns:1fr; padding:28px}
+      .hero-right{order:-1}
+      .features-grid{grid-template-columns:repeat(2,1fr)}
+      .detail{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      .features-grid{grid-template-columns:1fr}
+      nav.menu{display:none}
+      .title{font-size:34px}
+      .card .icon{width:44px;height:44px}
+    }
+
+    /* subtle animations */
+    .fade-up{transform:translateY(10px);opacity:0; transition:all 0.6s ease}
+    .fade-up.show{transform:none;opacity:1}
+    .pulse {
+      animation: pulse 3s infinite;
+    }
+    @keyframes pulse {
+      0%{box-shadow:0 8px 24px rgba(0,126,255,0.14)}
+      50%{box-shadow:0 20px 40px rgba(0,126,255,0.08)}
+      100%{box-shadow:0 8px 24px rgba(0,126,255,0.14)}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Nav -->
+  <header>
+    <div class="nav">
+      <div class="logo" aria-label="SQUID logo">
+        <div class="mark" aria-hidden="true">S</div>
+        <div>
+          <div style="font-size:13px; color:var(--muted); font-weight:700">PQC</div>
+          <div style="font-size:16px; letter-spacing:-0.01em">SQUID</div>
+        </div>
+      </div>
+
+      <nav class="menu" aria-label="Main Navigation">
+        <a href="#intro">Giới thiệu</a>
+        <a href="#features">Tính năng</a>
+        <a href="#details">Chi tiết</a>
+        <a href="#faq">FAQ</a>
+        <a class="cta-btn" href="#contact">Liên hệ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="intro" role="region" aria-label="Hero SQUID">
+    <div class="hero-left">
+      <div class="eyebrow">SQUID • Quality Intelligence</div>
+      <h1 class="title">SQUID — Giải pháp quản lý &amp; báo cáo chất lượng dành cho ngành may mặc</h1>
+      <p class="subtitle">Thu thập, phân loại và chuyển hóa dữ liệu kiểm tra để đưa ra giải pháp cải thiện chat lượng sản phẩm. Từ hiện trường (iPad / Mobile) tới ban quản lý (Web), SQUID đồng bộ, trực quan và tối ưu quy trình kiểm soát chất lượng.</p>
+
+      <div class="hero-cta">
+        <a class="cta-btn" href="#features">Tìm hiểu tính năng</a>
+        <a class="btn-ghost" href="#faq">Xem FAQ</a>
+      </div>
+
+      <div class="hero-features">
+        <div class="feature-pill">100% • Inline • Sample • Audit • AQL</div>
+        <div class="feature-pill">Báo cáo trực quan</div>
+        <div class="feature-pill">Tự động &amp; Real-time</div>
+        <div class="feature-pill">Offline &amp; Sync</div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="device" role="img" aria-label="Device preview">
+        <div class="screen">
+          <h4>Live Preview</h4>
+          <p>Dashboard tóm tắt, trạng thái AQL, top lỗi và heatmap SKU.</p>
+          <div style="flex:1"></div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div style="width:48px;height:28px;border-radius:8px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-weight:700">AQL</div>
+            <div style="width:120px;height:28px;border-radius:8px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-weight:700">100%</div>
+            <div style="width:120px;height:28px;border-radius:8px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-weight:700">Inline</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <!-- Introduction (detailed) -->
+    <section class="section" id="about" aria-label="Giới thiệu chi tiết">
+      <h2>Giới thiệu chung về SQUID</h2>
+      <p class="lead">SQUID là nền tảng phần mềm toàn diện được thiết kế chuyên sâu cho việc kiểm tra chat lượng sản phẩm may mặc. SQUID chuyển đổi dữ liệu kiểm tra chất lượng thành nguồn thông tin hữu ích — hỗ trợ từ thao tác nhập liệu tại hiện trường đến phân tích, báo cáo và hành động cải tiến tại cấp quản lý.</p>
+
+      <div class="detail" style="margin-top:18px">
+        <div class="panel">
+          <h3>Mục tiêu &amp; công dụng chính</h3>
+          <ul style="color:var(--muted); padding-left:18px; margin-top:12px">
+            <li><strong>Thống kê &amp; quản lý kiểm tra:</strong> Ghi nhận và tổng hợp theo 100% / Inline / Sample / Audit / AQL, giúp nắm chính xác khối lượng và trạng thái kiểm tra theo mã hàng, line và ca.</li>
+            <li><strong>Báo cáo tiến độ &amp; sản lượng:</strong> Báo cáo chi tiết về số lượng, tỷ lệ đạt/không đạt, tiến độ làm việc và KPI.</li>
+            <li><strong>Phân loại &amp; đánh giá lỗi:</strong> Hệ thống phân loại lỗi theo mức độ, hỗ trợ đo lường mức độ nghiêm trọng và hướng cải tiến.</li>
+            <li><strong>Trực quan &amp; thực thi:</strong> Biểu đồ, bảng tổng hợp, heatmap giúp nhóm QA phát hiện điểm nóng nhanh và hoạch định hành động.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>Ưu điểm nổi bật</h3>
+          <ol style="color:var(--muted); padding-left:18px; margin-top:12px">
+            <li><strong>Toàn diện:</strong> Kết nối chặt chẽ từ hiện trường tới ban quản lý, giảm độ trễ giữa phát hiện và hành động.</li>
+            <li><strong>Trực quan và trọng tâm:</strong> Báo cáo sẵn sàng cho họp đánh giá, top lỗi &amp; heatmap SKU.</li>
+            <li><strong>Nhanh &amp; luôn sẵn sàng:</strong> Xử lý nhanh, truy cập mọi lúc, gửi tóm tắt tự động qua email.</li>
+            <li><strong>Thao tác hiện trường:</strong> Nhập liệu ngay tại iPad, chọn vị trí lỗi bằng thao tác pinch-to-zoom, chụp ảnh và gửi nhanh chóng.</li>
+            <li><strong>Tùy biến &amp; bảo mật:</strong> Cấu hình nhóm, cảnh báo theo cấp, AQL, ngôn ngữ, xuất Excel và chia sẻ URL an toàn.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features" aria-label="Tính năng chính">
+      <h2>Tính năng chính</h2>
+      <p class="lead">SQUID tập hợp các chức năng thiết yếu cho QA, Supervisor và Manager, được thiết kế để tối ưu hóa quy trình kiểm tra và nâng cao chất lượng sản phẩm.</p>
+
+      <div class="features-grid">
+        <div class="card fade-up">
+          <div class="icon" style="background:linear-gradient(90deg,#0073ff,#00c6ff)">QA</div>
+          <h3>Hỗ trợ mọi hình thức kiểm tra</h3>
+          <p>100%, Inline/Endline, Sample, Audit, AQL — tạo và nhập dữ liệu cho mọi loại kiểm tra phổ biến trong ngành may mặc.</p>
+        </div>
+
+        <div class="card fade-up">
+          <div class="icon" style="background:linear-gradient(90deg,#ff6b6b,#ff9e6b)">UI</div>
+          <h3>Giao diện dữ liệu trực quan</h3>
+          <p>Phóng to để chọn vị trí lỗi, chụp ảnh, lưu lịch sử ảnh và nhập nhanh ngay tại thiết bị (iPad / Mobile).</p>
+        </div>
+
+        <div class="card fade-up">
+          <div class="icon" style="background:linear-gradient(90deg,#7c4dff,#00c6ff)">AN</div>
+          <h3>Tùy biến AQL &amp; cảnh báo</h3>
+          <p>Cấu hình kích thước lô, mức kiểm, mức đạt và cấp cảnh báo theo tỷ lệ lỗi đến người phụ trách phù hợp.</p>
+        </div>
+
+        <div class="card fade-up">
+          <div class="icon" style="background:linear-gradient(90deg,#ffd54f,#ff9e6b)">RT</div>
+          <h3>Đồng bộ &amp; Offline</h3>
+          <p>Hỗ trợ lưu hàng đợi khi offline và tự động đồng bộ khi có kết nối. Nhật ký hệ thống giúp truy xuất nguồn gốc.</p>
+        </div>
+
+        <div class="card fade-up">
+          <div class="icon" style="background:linear-gradient(90deg,#06d6a0,#00c6ff)">DS</div>
+          <h3>Báo cáo trực quan &amp; xuất Excel</h3>
+          <p>Biểu đồ cột, bar-line, heatmap SKU, và khả năng xuất file Excel/URL để chia sẻ trong nội bộ.</p>
+        </div>
+
+        <div class="card fade-up">
+          <div class="icon" style="background:linear-gradient(90deg,#4dd0e1,#0073ff)">IN</div>
+          <h3>Đa ngôn ngữ &amp; định dạng</h3>
+          <p>Hỗ trợ nhiều ngôn ngữ trong báo cáo (tối đa 3) và định dạng tên tệp khi xuất ra.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Details -->
+    <section class="section" id="details" aria-label="Chi tiết kỹ thuật">
+      <h2>Chi tiết vận hành &amp; tích hợp</h2>
+      <p class="lead">SQUID được tối ưu để hoạt động trong môi trường sản xuất tốc độ cao, đảm bảo truy xuất, tốc độ xử lý và khả năng tích hợp.</p>
+
+      <div style="margin-top:16px">
+        <div style="margin-bottom:16px">
+          <h3>Hoạt động tại hiện trường</h3>
+          <p style="color:var(--muted)">Nhân viên kiểm tra có thể nhập dữ liệu trực tiếp trên iPad hoặc mobile: chọn vị trí lỗi với thao tác pinch-to-zoom, chụp ảnh, chọn mục lỗi và gửi — giảm thiểu thao tác thủ công và sai sót.</p>
+        </div>
+
+        <div style="margin-bottom:16px">
+          <h3>Quản trị &amp; báo cáo trên Web</h3>
+          <p style="color:var(--muted)">Admin có thể tạo/chỉnh sửa nhóm, cấu hình AQL, định nghĩa định dạng lỗi, tạo cảnh báo theo cấp và cấu hình ai nhận tóm tắt hàng ngày. Các báo cáo có thể được xuất Excel hoặc chia sẻ bằng URL có thời hạn.</p>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <h3>Truy xuất &amp; nhật ký</h3>
+          <p style="color:var(--muted)">Hệ thống lưu nhật ký hệ thống (data logs) và lịch sử dữ liệu chưa được upload, thuận tiện cho kiểm toán nội bộ và xử lý khi có sự cố.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq" aria-label="FAQ">
+      <h2>FAQ — Câu hỏi thường gặp</h2>
+      <p class="lead">Các câu hỏi được chia theo 2 nhóm: <strong>Mobile App</strong> (dành cho kiểm tra viên/hiện trường) và <strong>Web</strong> (dành cho Admin / Quản trị).</p>
+
+      <div style="margin-top:18px">
+        <div class="faq-tabs" role="tablist" aria-label="FAQ tabs">
+          <div class="tab active" data-tab="mobile">Mobile App</div>
+          <div class="tab" data-tab="web">Web</div>
+        </div>
+
+        <div id="mobile" class="faq-panel">
+          <div class="faq-list" role="list">
+            <!-- Mobile QAs -->
+            <details class="qa">
+              <summary>Làm sao để đăng nhập trên Mobile App?</summary>
+              <p>SQUID hỗ trợ đăng nhập bằng Email + OTP hoặc QR Code Sign In (quét mã bằng camera). Nếu không nhận OTP kiểm tra thư mục spam hoặc thử QR Code nếu có.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Ứng dụng có hỗ trợ chọn vị trí lỗi bằng phóng to không?</summary>
+              <p>Có — phóng to bằng 2 ngón tay để chọn chính xác vị trí lỗi, sau đó chọn mục lỗi và tải ảnh.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Làm sao tải ảnh lỗi và lưu ảnh bổ sung?</summary>
+              <p>Ấn biểu tượng chụp ảnh để chụp trực tiếp hoặc chọn ảnh từ máy, sau đó bấm Gửi để lưu. Có khu vực chứa toàn bộ ảnh đã chèn.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Nếu mất mạng khi nhập dữ liệu?</summary>
+              <p>Dữ liệu sẽ được lưu tạm ở mục hàng đợi (offline). Khi có mạng, dùng chức năng Gửi để đồng bộ lên server.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Có thể tiếp tục báo cáo chưa hoàn thành không?</summary>
+              <p>Có — hệ thống cho phép “Bắt đầu kiểm tra hoặc tiếp tục kiểm tra nếu báo cáo chưa được hoàn thiện” trong phần chi tiết báo cáo.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Giới hạn kích thước/định dạng ảnh?</summary>
+              <p><em>Kích thuớc ảnh được giới hạn với tỷ lệ 1:1</em> — Được tích hợp khoanh vùng vị trí xảy ra lỗi bằng thao tác chạm nhẹ nhàng. (Bạn có thể quy định ví dụ: JPG/PNG ≤ 5MB.)</p>
+            </details>
+
+            <details class="qa">
+              <summary>Có thể tạo kiểm tra AQL từ Mobile không?</summary>
+              <p><em>Có</em> — Manual mô tả tạo/chỉnh sửa các mã hang kiểm tra bằng hình thức AQL chủ yếu qua giao diện Mobile.</p>
+            </details>
+          </div>
+        </div>
+
+        <div id="web" class="faq-panel" style="display:none">
+          <div class="faq-list" role="list">
+            <!-- Web QAs -->
+            <details class="qa">
+              <summary>Làm sao tạo group (nhóm) trên Web?</summary>
+              <p>Vào Menu → Nhóm → Tạo/Chỉnh sửa: điền tên nhóm, chi nhánh, địa chỉ, nhà máy, cấu hình AQL, ngôn ngữ báo cáo, định dạng lỗi và thêm người nhận cảnh báo.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Làm sao đặt cảnh báo theo tỷ lệ lỗi?</summary>
+              <p>Trong cấu hình nhóm có mục Chọn cấp độ cảnh báo (ví dụ: Cấp 1: 5% → gửi cho A; Cấp 2: 10% → gửi cho sếp…). Khi thêm người vào nhóm, gán ai sẽ nhận cảnh báo.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Chi tiết tạo báo cáo AQL trên Web?</summary>
+              <p>Chọn kích thước lô, mức kiểm AQL, mức đạt và mức độ nghiêm ngặt. Một số thông tin như số lượng, tỷ lệ, ghi chú (PO/DO/JOB/Carton No) là bắt buộc trước khi nhập.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Làm sao xuất Excel / chia sẻ báo cáo bằng URL?</summary>
+              <p>Trong chi tiết báo cáo có chức năng Tải file Excel. Khi tạo báo cáo có thể chọn thời hạn truy cập báo cáo qua URL (tối đa 30 ngày).</p>
+            </details>
+
+            <details class="qa">
+              <summary>Ai được quyền chỉnh sửa báo cáo?</summary>
+              <p><em>Những người được cấp quyền chỉnh sửa đã được them trong nhóm</em> — Manual nêu chức năng Chỉnh sửa báo cáo (thời gian làm việc, số nhân viên, ghi chú) tham khảo Manual để biết them chi tiết.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Hệ thống hỗ trợ audit log và phục hồi không?</summary>
+              <p>Có nhật ký hệ thống để tra cứu các hành động và dòng lệnh ứng dụng — thuận tiện cho kiểm toán và điều tra khi cần.</p>
+            </details>
+
+            <details class="qa">
+              <summary>Có thể xem trực tiếp báo cáo mà không cần truy cập vào web không?</summary>
+              <p><em>Có</em> — Tuy nhiên việc hiển thị báo cáo trên Ipad thường chỉ là phần khái quát, nếu muốn chi tiết hơn và có thể chia sẻ cho người khác thì vẫn cần truy cập vào web.</p>
+            </details>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact / CTA -->
+    <section class="section" id="contact" aria-label="Contact">
+      <h2>Liên hệ &amp; Triển khai</h2>
+      <p class="lead">Bạn muốn thử demo, yêu cầu triển khai hoặc cần tư vấn? Liên hệ đội triển khai PQC để được tư vấn và lên kế hoạch.</p>
+
+      <div style="display:flex; gap:14px; align-items:center; margin-top:16px; flex-wrap:wrap;">
+        <a class="cta-btn" href="mailto:thangho@pqc.co.jp">Yêu cầu demo</a>
+        <a class="btn-ghost" href="mailto:thangho@pqc.co.jp">Liên hệ triển khai</a>
+        <div style="color:var(--muted); font-size:13px">Hoặc tải bản PDF nội dung này để gửi nội bộ.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div style="max-width:var(--max-width); margin:0 auto">
+      <div style="margin-bottom:10px; font-weight:700">SQUID • PQC</div>
+      <div style="color:var(--muted); font-size:13px">© PQC — All rights reserved. Trang giới thiệu nội bộ</div>
+    </div>
+  </footer>
+
+  <script>
+    // Small JS: tabs, reveal animations, smooth scroll, FAQ toggle
+    document.addEventListener('DOMContentLoaded', function(){
+      // tabs
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t=>{
+        t.addEventListener('click', ()=> {
+          tabs.forEach(x=>x.classList.remove('active'));
+          t.classList.add('active');
+          const id = t.dataset.tab;
+          document.getElementById('mobile').style.display = id === 'mobile' ? 'block' : 'none';
+          document.getElementById('web').style.display = id === 'web' ? 'block' : 'none';
+          // scroll to FAQ
+          document.getElementById('faq').scrollIntoView({behavior:'smooth', block:'start'});
+        });
+      });
+
+      // simple reveal
+      const fadeEls = document.querySelectorAll('.fade-up');
+      const onScroll = () => {
+        const trigger = window.innerHeight * 0.9;
+        fadeEls.forEach(el=>{
+          const r = el.getBoundingClientRect();
+          if(r.top < trigger) el.classList.add('show');
+        });
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, {passive:true});
+
+      // smooth nav links
+      document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', function(e){
+          const target = document.querySelector(this.getAttribute('href'));
+          if(target){
+            e.preventDefault();
+            target.scrollIntoView({behavior:'smooth', block:'start'});
+          }
+        });
+      });
+
+      // FAQ toggle handled by native <details>/<summary>, no JS required
+    });
+  </script>
+</body>
+</html>
